@@ -1,0 +1,108 @@
+﻿var xmlurl = "https://imperium.productions/games/crazy-tonight/games/dumb-word/xml/infos.xml";
+
+var txt = "", txttcb = 0, txtt_idlg = 2;
+var txtt = new Array();
+
+var infos = "";
+function load_xml()
+	{
+	$.ajax
+			({
+			type: "GET",
+			data: "xml=infos",
+			url: xmlurl,
+			success: function(answer)
+				{
+				build_txtts(answer);
+					
+				reload();
+				},
+			error: function (error)
+				{
+				alert("Erreur. Vérifiez si vous avez bien une connexion internet.");
+				}
+			});
+	}
+	
+function build_txtts(answer)
+	{
+	$(answer).find("word").each(function(){
+		var en = $(this).find("language[lang='en']").text();
+		var es = $(this).find("language[lang='es']").text();
+		var fr = $(this).find("language[lang='fr']").text();
+        txtt.push([en,es,fr]);
+		});
+	}
+
+function reload()
+	{
+	$("#txt").hide(); $("#txt").fadeIn();
+
+	txttcb = nbralet(0,txtt.length);
+
+	txt = txtt[txttcb][txtt_idlg];
+
+	$("#txt").html(txt);
+
+	$("#content").css("background-color",colorgen("fluo",1));
+	}
+	
+function change_lg(id_lg)
+	{
+	localStorage.setItem('savelg',id_lg);
+	
+	var help_txt = "";
+	var who_txt = "", who_donation_h3 = "", who_donation_btn_txt = "";
+	switch (id_lg)
+		{
+		case "EN" :
+			txtt_idlg = 1; txtt2_idlg = 0;
+			
+			help_txt += "<h3>How to play Crazy Mimes?</h3>";
+			help_txt += "<p>There are no rules for Crazy Mimes! You have a tool, you do what you want with it ... Here are some ideas to liven up your evenings ...</p>";
+			help_txt += "<p><b>Take turns</b><br />Each in turn, the players move from one dare to another ... Quite simply.</p>";
+			help_txt += "<p><b>Accepted or refused</b><br />A player accepts or refuses a dare. If he accepts it, it is 1 point. If he refuses it, he passes his turn; the next player can then accept this pledge and thus take the point.</p>";
+			help_txt += "<p><b>Card game</b><br />Get started playing a card game where there are losers quickly. They will then have to make a dare as a punishment!</p>";
+			help_txt += "<p><b>The fondue savoyarde</b><br />What a pleasure to get together around a good cheese fondue! Sometimes it happens that a person faces a piece of bread falling from their baguette, whether this accident was intentionally caused by someone else or not&nbsp;... Now is the time for them to be subjected to a dare and, believe us, <b>Crazy Mimes</b> is the right app for that!</p>";
+			help_txt += "<p><b>etc, etc.</b><br />The possibilities are limitless...</p>";
+			
+			who_txt = "Do not hesitate to visit our site to discover other games.";
+		break;
+		case "ES" :
+			txtt_idlg = 2; txtt2_idlg = 1;
+			
+			help_txt += "<h3>¿Cómo jugar Crazy Mimes?</h3>";
+			help_txt += "<p>¡No hay reglas para Crazy Mimes! Tienes una herramienta, haces lo que quieras con ella&nbsp;... Aquí tienes algunas ideas para amenizar tus veladas&nbsp;...</p>";
+			help_txt += "<p><b>Por turnos</b><br />Cada uno a su vez, los jugadores pasan de un reto a otro ... Es simplemente.</p>";
+			help_txt += "<p><b>Aceptado o rechazado</b><br />Un jugador acepta o rechaza un reto. Si ese jugador lo acepta, es 1 punto. Si lo rechaza, pasa su turno; el siguiente jugador puede aceptar esto reto y, por tanto, hacerse con el punto.</p>";
+			help_txt += "<p><b>Juego de cartas</b><br />Empiece a jugar un juego de cartas en el que hay perdedores rápidamente. ¡Entonces tendrán que hacer uno reto como castigo!</p>";
+			help_txt += "<p><b>Fondue de Saboya</b><br />¡Qué placer reunirse alrededor de una buena fondue de queso! A veces sucede que una persona se enfrenta a que se le caiga un trozo de pan de su baguette, ya sea que este accidente haya sido provocado intencionadamente por otra persona o no ... Ahora es el momento de que se sometan a uno reto y, créanos, <b>Crazy Mimes</b> es la aplicación adecuada para eso!</p>";
+			help_txt += "<p><b>etcétera, etcétera.</b><br />Las posibilidades son ilimitadas&nbsp;...</p>";
+			
+			who_txt = "No dude en visitar nuestro sitio para descubrir otros juegos.";
+		break;
+		case "FR" :
+			txtt_idlg = 3; txtt2_idlg = 2;
+			
+			help_txt += "<h3>Comment jouer à Crazy Mimes ?</h3>";
+			help_txt += "<p>Il n'y a pas de règles pour Crazy Mimes&nbsp;! Vous avez un outil, vous en faites ce que vous voulez&nbsp;... Voici toutefois quelques idées pour animer vos soirées&nbsp;...</p>";
+			help_txt += "<p><b>Tour à tour</b><br />Chacun à leur tour, les joueurs passent d'un gage à un autre&nbsp;... Tout simplement.";
+			help_txt += "<p><b>Accepté ou refusé</b><br />Un joueur accepte un gage ou le refuse. S'il l'accepte, c'est 1 point. S'il le refuse, il passe son tour ; le joueur suivant peut alors accepter ce gage et donc prendre le point.</p>";
+			help_txt += "<p><b>Jeu de carte</b><br />Mettez-vous à jouer à un jeu de carte où il y a rapidement des perdants. Ceux-ci devront alors effectuer un gage en guise de punition&nbsp;!</p>";
+			help_txt += "<p><b>La fondue savoyarde</b><br />Quel plaisir de se réunir autour d'une bonne fondue au fromage&nbsp;! Parfois, il arrive qu'une personne face tomber le morceau de pain de sa baguette, que cet accident ait été volontairement provoqué par quelqu'un d'autre ou pas&nbsp;... C'est le moment pour elle d'être soumise à un gage et, croyez-nous, <b>Crazy Mimes</b> est la bonne application pour cela&nbsp;!</p>";
+			help_txt += "<p><b>etc, etc.</b><br />Les possibilités sont infinies&nbsp;...</p>";
+			
+			who_txt = "N'hésitez pas à vous rendre sur notre site pour découvrir d'autre jeux.";
+		break;
+		}
+	txt = txtt[txttcb][txtt_idlg]; $("#txt").html(txt);
+	$("#help").html(help_txt);
+	$("#who-txt").html(who_txt);
+	}
+
+function windowback()
+	{
+	$("#windowback").fadeOut(); $("#windowback-close").fadeOut();
+	$("#help").fadeOut();
+	$("#who").fadeOut();
+	}
